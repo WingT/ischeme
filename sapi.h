@@ -1,0 +1,62 @@
+#ifndef _sapi
+#define _sapi
+#include"stype.h"
+extern obj_t *new_pair(void);
+extern void error(char *err_info);
+extern int eq(obj_t *obj1,obj_t *obj2);
+extern obj_t *car(obj_t *pair);
+extern obj_t *cdr(obj_t *pair);
+extern obj_t *cadr(obj_t *pair);
+extern obj_t *cons(obj_t *car,obj_t *cdr);
+extern obj_t *new_obj(void);
+extern obj_t *new_procedure(void);
+extern obj_t *new_pair(void);
+extern obj_t *new_symbol(void);
+extern obj_t *new_string(void);
+extern obj_t *new_integer(void);
+extern obj_t *new_real(void);
+extern epair_t *new_epair(void);
+extern int objSymbolEqString(obj_t *objSymbol,char *string);
+extern int self_evaluating(obj_t *exp);
+extern int variable(obj_t *exp);
+extern obj_t *lookup_variable_value(obj_t *exp,obj_t *env);
+extern int quoted(obj_t *exp);
+extern obj_t *text_of_quotation(obj_t *exp);
+extern int assignment(obj_t *exp);
+extern obj_t *assignment_variable(obj_t *exp);
+extern obj_t *assignment_value(obj_t *exp);
+extern void set_variable_value(obj_t *var,obj_t *val,obj_t *env);
+extern int definition(obj_t *exp);
+extern obj_t *definition_variable(obj_t *exp);
+extern obj_t *make_lambda(obj_t *parameters,obj_t *body);
+extern obj_t *definition_value(obj_t *exp);
+extern void define_variable(obj_t *var,obj_t *val,obj_t *env);
+extern int is_if(obj_t *exp);
+extern int is_null(obj_t *exp);
+extern int is_true(obj_t *exp);
+extern obj_t *if_predicate(obj_t *exp);
+extern obj_t *if_consequent(obj_t *exp);
+extern obj_t *if_alternative(obj_t *exp);
+extern int is_lambda(obj_t *exp);
+extern obj_t *lambda_parameters(obj_t *exp);
+extern obj_t *lambda_body(obj_t *exp);
+extern obj_t *make_procedure(obj_t *parameters,obj_t *body,obj_t *env);
+extern int is_begin(obj_t *exp);
+extern obj_t *begin_actions(obj_t *exp);
+extern int is_cond(obj_t *exp);
+extern int is_let(obj_t *exp);
+extern obj_t *map(obj_t *(*fun)(obj_t *element),obj_t *list);
+extern obj_t *let2combination(obj_t *exp);
+extern int is_application(obj_t *exp);
+extern obj_t *operator(obj_t *exp);
+extern obj_t *operands(obj_t *exp);
+extern obj_t *procedure_body(obj_t *procedure);
+extern obj_t *procedure_parameters(obj_t *procedure);
+extern obj_t *procedure_environment(obj_t *procedure);
+extern obj_t *new_env(void);
+extern void print(obj_t *exp);
+extern void add_libfunc(libfunc_t funcs[]);
+extern void del_obj(obj_t *obj);
+extern obj_t *make_tail(obj_t *exp,obj_t *env);
+
+#endif

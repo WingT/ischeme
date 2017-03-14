@@ -1,0 +1,9 @@
+fix the bug of eval:do-while loop cause malloc to fail
+add dynamic load lib support && add primitive functions support
+add repl support
+add arbitary arguments support
+add syntax-definition support
+add mark sweep garbage collector support
+add tail recurse support
+increase arithmetic precision
+
