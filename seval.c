@@ -18,34 +18,8 @@ obj_t *apply_primitive_procedure(obj_t *procedure,obj_t *arguments);
 obj_t *extend_environment(obj_t *vars,obj_t *vals,obj_t *base_env);
 obj_t *eval_let(obj_t *exp,obj_t *env);
 obj_t *eval(obj_t *exp,obj_t *env){
-  obj_t *ans;
-  if (self_evaluating(exp))
-    return exp;
-  if (variable(exp))
-    return lookup_variable_value(exp,env);
-  if (quoted(exp))
-    return text_of_quotation(exp);
-  if (assignment(exp))
-    return eval_assignment(exp,env);
-  if (definition(exp))
-    return eval_definition(exp,env);
-  if (is_lambda(exp))
-    return eval_lambda(exp,env);
-  if (is_if(exp))
-    ans=eval_if(exp,env);
-  else
-    if (is_begin(exp))
-      ans=eval_begin(exp,env);
-    else
-      if (is_cond(exp))
-        ans=eval_cond(exp,env);
-      else
-        if (is_let(exp))
-          ans=eval_let(exp,env);
-        else
-          if (is_application(exp))//todo let* letrc
-            ans=eval_apply(exp,env);
-  while (ans->type==PAIR && car(ans)==&tail){
+  obj_t *ans=make_tail(exp,env);
+  do {
     obj_t *next_ans;
     exp=cadr(ans);
     env=cdr(cdr(ans));
@@ -85,7 +59,7 @@ obj_t *eval(obj_t *exp,obj_t *env){
     del_obj(ans);
     next_ans->ref--;
     ans=next_ans;
-  }
+  }while (ans->type==PAIR && car(ans)==&tail);
   return ans;
 }
 obj_t *eval_assignment(obj_t *exp,obj_t *env){
@@ -186,7 +160,9 @@ obj_t *apply(obj_t *procedure,obj_t *arguments){
     return apply_primitive_procedure(procedure,arguments);
   if (procedure->type==PROCEDURE){
     obj_t *extended_environment=extend_environment(procedure_parameters(procedure),arguments,procedure_environment(procedure));
+    extended_environment->ref++;
     obj_t *ans=eval_sequence(procedure_body(procedure),extended_environment);
+    extended_environment->ref--;
     ans->ref++;
     del_obj(extended_environment);
     ans->ref--;

@@ -253,8 +253,10 @@ void define_variable(obj_t *var,obj_t *val,obj_t *env){
   if (epair==NULL){
     epair_t *newepair=new_epair();
     newepair->symbol=(char *)malloc(strlen(var->data.symbol)+1);
-    if (newepair->symbol==NULL)
+    if (newepair->symbol==NULL){
+      free(newepair);
       error("no enough memory!\n");
+    }
     else{
       strcpy(newepair->symbol,var->data.symbol);
       newepair->obj=val;
