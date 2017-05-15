@@ -1,8 +1,13 @@
-parse_test:test_parse.c sparse.c sapi.c sconstants.c sparse.h sapi.h sconstants.h stype.h
-	gcc -Wall -g -o parse_test test_parse.c sparse.c sapi.c sconstants.c
+dir_inc=./include
+dir_src=./src
+dir_lib=./lib
+src=$(wildcard ${dir_src}/*.c)
+inc=${wildcard ${dir_inc}/*.h}
+CFLAGS=-Wall -I${dir_inc}
+scheme:${src} ${include} ${dir_lib}/sbaselib.c ${dir_lib}/siolib.c
+	gcc -rdynamic ${CFLAGS} -o scheme ${src} ${dir_lib}/sbaselib.c ${dir_lib}/siolib.c -ldl
 
-eval_test:test_eval.c seval.c sparse.c sapi.c sconstants.c seval.h sparse.h sapi.h sconstants.h stype.h sbaselib.c slib.h sinit.c sinit.h siolib.c
-	gcc -rdynamic -Wall -g -o eval_test test_eval.c seval.c sparse.c sapi.c sconstants.c sbaselib.c sinit.c siolib.c -ldl
-
-smathlib.so:smathlib.c sapi.h sapi.c  sconstants.h sconstants.c stype.h
-	gcc -Wall -g -fPIC -shared -o smathlib.so smathlib.c -lm
+smathlib.so:${dir_lib}/smathlib.c ${dir_src}/sapi.c ${dir_src}/sconstants.c  ${dir_inc}/sconstants.h ${dir_inc}/stype.h ${dir_inc}/sapi.h
+	gcc ${CFLAGS} -fPIC -shared -o smathlib.so ${dir_lib}/smathlib.c -lm
+clean:
+	rm -f scheme && rm -f *.so
