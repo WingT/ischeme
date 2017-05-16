@@ -113,7 +113,7 @@ static obj_t *schemeB_require(obj_t *args){
   char *lib=car(args)->data.string;
   char libname[MAXLIBNAMELEN];
   char libopenfunname[MAXLIBNAMELEN];
-  strcpy(libname,"s");
+  strcpy(libname,"./s");
   strcat(libname,lib);
   strcat(libname,"lib.so");
   strcpy(libopenfunname,"schemeopen_");
